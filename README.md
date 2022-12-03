@@ -17,4 +17,4 @@ Read and show calendar of the current date
 write
 Write appointment to file
 
-![alt text](https://github.com/[kahootbird]/[php-code-sample]/blob/[main]/Calendar.png?raw=true)
+![alt text](https://github.com/kahootbird/php-code-sample/blob/main/Calendar.png?raw=true)
