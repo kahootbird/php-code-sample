@@ -1,7 +1,7 @@
 <?php
 /*
 PHP appointment manager
-This app is a work in progress
+This app isn't fully functional
 */
 /* Pseudo code
 Command Line Arguments
@@ -12,7 +12,6 @@ Command Line Arguments
     Write File
   View calendar month CLI output
 */
-
 //Create class object
 $obj = new Calendar($argv);
 
@@ -26,7 +25,8 @@ class Calendar {
         $this->read_calendar();
         break;
       case "write":
-        $this->write_appointment("test");
+        #TODO get more arguments for each parameter and verify them
+        $this->write_appointment(1,10,2022);
         break;
         case 0:
         $this->read_calendar();
@@ -34,11 +34,10 @@ class Calendar {
     }
   }
 
-  //This app is a work in progress
   private function read_calendar()
   {
-    //TODO: set varaibles to public/private/protected etc
     #Get day of week for first day of month for the printout value
+    $this->read_file();
     $query_date = date("Y/m/01");
     $day_of_week = date('N', strtotime(date('Y-m-01', strtotime($query_date))));
     //Get days of the month
@@ -46,8 +45,7 @@ class Calendar {
     $year = date('y');
     $monthdays = cal_days_in_month(CAL_GREGORIAN, $month,$year); // 31
     $month = date('F');
-    #print "\n Monthdays " . $monthdays . "\n";
-    $totalweeks = 4;
+    #index variable
     $counter = 0;
 
     //TODO read dates for appointments and mark them
@@ -60,13 +58,12 @@ class Calendar {
           if ($day_of_week <= 0)
           $counter++;
           $day_of_week--;
-          //Print in columns?
+          //Print in columns, make space even account for 2 digits
           if ($counter <= $monthdays)
             if ($counter != 0)
             echo "$counter";
             if ($counter == 0)
             echo " ";
-
           echo "    ";
           //Keep space equal for extra digit in printout
           if ($counter < 10)
@@ -77,15 +74,37 @@ class Calendar {
         print "Appointments are marked with ! on the number.\n";
   }
 
-  private function write_appointment($value)
+  private function read_file()
   {
-    //TODO: error checking on $value
-    print "WRITE CALENDAR";
-    $myfile = fopen("dates.json", "w") or die("Unable to open file to write!");
-    $txt = "";
+    echo "READ FILE\n";
+    $handle = fopen("dates.json", "r");
+    if ($handle) {
+    while (($line = fgets($handle)) !== false) {
+        // process the line read.
+        echo $line;
+        $str_arr = preg_split ("/\,/", $line);
+
+        #TODO: verify it is a valid date entered
+        echo $str_arr[0] . $str_arr[1] . $str_arr[2];
+    }
+    fclose($handle);
+    }
+    echo "\n";
+    #TODO return array of dates
+  }
+
+  private function write_appointment($month, $day, $year)
+  {
+    print "WRITE CALENDAR\n";
+    $myfile = fopen("dates.json", "a") or die("Unable to open file to write!");
+    $txt = $day . "," . $month . "," . $year . "\n";
+        //TODO: error checking on $month $day and $year
     fwrite($myfile, $txt);
   }
+
+  private function readfile()
+  {
+    #TODO read file and return value
+  }
 }
-
-
 ?>
